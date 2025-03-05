@@ -1,0 +1,52 @@
+syntax = "proto3";
+
+package auth;
+
+option go_package = "restrocheck.sso.v1;ssov1";
+
+service Auth {
+    rpc Register (RegisterRequest) returns (RegisterResponse);
+    rpc Login (LoginRequest) returns (LoginResponse);
+    rpc IsAdmin (IsAdminRequest) returns (IsAdminResponse);
+    rpc Logout (LogoutRequest) returns (LogoutResponse);
+}
+
+// Register
+message RegisterRequest {
+    string email = 1;   // Email of the user.
+    string password = 2; // Password of the user.
+}
+
+message RegisterResponse {
+    int64 user_id = 1; // Unique ID of the registered user.
+}
+
+// Login
+message LoginRequest {
+    string email = 1;   // Email of the user.
+    string password = 2; // Password of the user.
+    uint32 app_id = 3;  // ID of the application requesting authentication.
+}
+
+message LoginResponse {
+    string access_token = 1;  // JWT access token for authentication.
+    string refresh_token = 2; // JWT refresh token to obtain a new access token.
+}
+
+// IsAdmin
+message IsAdminRequest {
+    int64 user_id = 1; // Unique ID of the user to check.
+}
+
+message IsAdminResponse {
+    bool is_admin = 1; // Indicates whether the user has admin privileges.
+}
+
+// Logout
+message LogoutRequest {
+    string refresh_token = 1; // Refresh token of the user to logout.
+}
+
+message LogoutResponse {
+    bool success = 1; // Indicates whether the logout was successful.
+}
